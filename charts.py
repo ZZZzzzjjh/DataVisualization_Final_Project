@@ -14,22 +14,24 @@ SKY = "#71B8ED"
 LAVENDER = "#B8AEEA"
 PINK = "#F2A8DA"
 PRIMARY = CORAL
-SECONDARY = SAGE
-ACCENT = APRICOT
+SECONDARY = APRICOT
+ACCENT = CREAM
 PURPLE = LAVENDER
 ROSE = PINK
-COLOR_SEQ = [CORAL, APRICOT, CREAM, SAGE, AQUA, SKY, LAVENDER, PINK]
-COLOR_SCALE = [CREAM, SAGE, AQUA, SKY, LAVENDER]
-BLUE_SEQ = [CORAL, APRICOT, CREAM, SAGE, AQUA, SKY, LAVENDER, PINK]
-BAR_SCALE = [CREAM, AQUA, SKY, SAGE, APRICOT, CORAL]
+SCI_PALETTE = [CORAL, APRICOT, CREAM, SAGE, AQUA, SKY, LAVENDER, PINK]
+COLOR_SEQ = SCI_PALETTE
+COLOR_SCALE = SCI_PALETTE
+BLUE_SEQ = SCI_PALETTE
+BAR_SCALE = SCI_PALETTE
 HEATMAP_SCALE = [
-    [0.0, "#FBE79E"],
-    [0.22, "#F2B56E"],
-    [0.40, "#F57C6E"],
-    [0.58, "#84C3B7"],
-    [0.74, "#88D7DA"],
-    [0.88, "#71B8ED"],
-    [1.0, "#F2A8DA"],
+    [0.0, CORAL],
+    [0.14, APRICOT],
+    [0.29, CREAM],
+    [0.43, SAGE],
+    [0.57, AQUA],
+    [0.71, SKY],
+    [0.86, LAVENDER],
+    [1.0, PINK],
 ]
 TEMPLATE = "plotly_white"
 
@@ -98,15 +100,15 @@ def monthly_sales_line(data: pd.DataFrame) -> go.Figure:
     if data.empty:
         return empty_figure("月度销售趋势")
     fig = go.Figure()
-    fig.add_trace(go.Bar(x=data["Month"], y=data["交易量"], name="交易量", marker_color=CREAM, yaxis="y2", opacity=0.58))
+    fig.add_trace(go.Bar(x=data["Month"], y=data["交易量"], name="交易量", marker_color=COLOR_SEQ[0], yaxis="y2", opacity=0.58))
     fig.add_trace(
         go.Scatter(
             x=data["Month"],
             y=data["销售额"],
             mode="lines+markers",
             name="销售额",
-            line=dict(color=PRIMARY, width=4),
-            marker=dict(size=8, color=PRIMARY, line=dict(color="#FFFFFF", width=1.5)),
+            line=dict(color=COLOR_SEQ[1], width=4),
+            marker=dict(size=8, color=COLOR_SEQ[1], line=dict(color="#FFFFFF", width=1.5)),
         )
     )
     fig.update_layout(
@@ -138,8 +140,8 @@ def monthly_category_area(data: pd.DataFrame) -> go.Figure:
 def daily_sales_line(data: pd.DataFrame) -> go.Figure:
     if data.empty:
         return empty_figure("日度销售额变化")
-    fig = px.line(data, x="DateOnly", y="销售额", markers=False, color_discrete_sequence=[SECONDARY])
-    fig.update_traces(fill="tozeroy", fillcolor="rgba(15, 118, 110, 0.13)")
+    fig = px.line(data, x="DateOnly", y="销售额", markers=False, color_discrete_sequence=[COLOR_SEQ[0]])
+    fig.update_traces(fill="tozeroy", fillcolor="rgba(245, 124, 110, 0.16)")
     fig.update_yaxes(title="销售额", tickprefix="$")
     fig.update_xaxes(title="日期")
     return apply_layout(fig, "日度销售额变化", 350)
@@ -216,8 +218,8 @@ def category_waterfall(data: pd.DataFrame, top_n: int = 6) -> go.Figure:
             y=y,
             measure=measure,
             connector={"line": {"color": "#CBD5E1"}},
-            increasing={"marker": {"color": SECONDARY}},
-            totals={"marker": {"color": PRIMARY}},
+            increasing={"marker": {"color": COLOR_SEQ[0]}},
+            totals={"marker": {"color": COLOR_SEQ[1]}},
             hovertemplate="%{x}<br>销售额：$%{y:,.2f}<extra></extra>",
         )
     )
@@ -287,7 +289,7 @@ def price_band_bar(data: pd.DataFrame) -> go.Figure:
     if data.empty:
         return empty_figure("价格带销售贡献")
     fig = go.Figure()
-    fig.add_trace(go.Bar(x=data["PriceBand"], y=data["销售额"], name="销售额", marker_color=CREAM, opacity=0.72))
+    fig.add_trace(go.Bar(x=data["PriceBand"], y=data["销售额"], name="销售额", marker_color=COLOR_SEQ[0], opacity=0.72))
     fig.add_trace(
         go.Scatter(
             x=data["PriceBand"],
@@ -295,8 +297,8 @@ def price_band_bar(data: pd.DataFrame) -> go.Figure:
             mode="lines+markers",
             name="销量",
             yaxis="y2",
-            line=dict(color=PURPLE, width=4),
-            marker=dict(size=8, color=PURPLE, line=dict(color="#FFFFFF", width=1.5)),
+            line=dict(color=COLOR_SEQ[1], width=4),
+            marker=dict(size=8, color=COLOR_SEQ[1], line=dict(color="#FFFFFF", width=1.5)),
         )
     )
     fig.update_layout(
