@@ -5,16 +5,32 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 
-PRIMARY = "#2563EB"
-SECONDARY = "#0F766E"
-ACCENT = "#F59E0B"
-PURPLE = "#7C3AED"
-ROSE = "#E11D48"
-COLOR_SEQ = [PRIMARY, SECONDARY, ACCENT, PURPLE, ROSE, "#16A34A", "#0891B2", "#64748B"]
-COLOR_SCALE = ["#BFDBFE", "#93C5FD", "#60A5FA", "#2563EB", "#0EA5E9", "#0F766E"]
-BLUE_SEQ = ["#2563EB", "#3B82F6", "#60A5FA", "#93C5FD", "#0EA5E9", "#38BDF8", "#7DD3FC", "#BAE6FD"]
-BAR_SCALE = ["#BFDBFE", "#93C5FD", "#60A5FA", "#3B82F6", "#2563EB", "#0F766E"]
-HEATMAP_SCALE = "YlOrRd"
+CORAL = "#F57C6E"
+APRICOT = "#F2B56E"
+CREAM = "#FBE79E"
+SAGE = "#84C3B7"
+AQUA = "#88D7DA"
+SKY = "#71B8ED"
+LAVENDER = "#B8AEEA"
+PINK = "#F2A8DA"
+PRIMARY = CORAL
+SECONDARY = SAGE
+ACCENT = APRICOT
+PURPLE = LAVENDER
+ROSE = PINK
+COLOR_SEQ = [CORAL, APRICOT, CREAM, SAGE, AQUA, SKY, LAVENDER, PINK]
+COLOR_SCALE = [CREAM, SAGE, AQUA, SKY, LAVENDER]
+BLUE_SEQ = [CORAL, APRICOT, CREAM, SAGE, AQUA, SKY, LAVENDER, PINK]
+BAR_SCALE = [CREAM, AQUA, SKY, SAGE, APRICOT, CORAL]
+HEATMAP_SCALE = [
+    [0.0, "#FBE79E"],
+    [0.22, "#F2B56E"],
+    [0.40, "#F57C6E"],
+    [0.58, "#84C3B7"],
+    [0.74, "#88D7DA"],
+    [0.88, "#71B8ED"],
+    [1.0, "#F2A8DA"],
+]
 TEMPLATE = "plotly_white"
 
 
@@ -82,7 +98,7 @@ def monthly_sales_line(data: pd.DataFrame) -> go.Figure:
     if data.empty:
         return empty_figure("月度销售趋势")
     fig = go.Figure()
-    fig.add_trace(go.Bar(x=data["Month"], y=data["交易量"], name="交易量", marker_color="#BFDBFE", yaxis="y2", opacity=0.42))
+    fig.add_trace(go.Bar(x=data["Month"], y=data["交易量"], name="交易量", marker_color=CREAM, yaxis="y2", opacity=0.58))
     fig.add_trace(
         go.Scatter(
             x=data["Month"],
@@ -271,7 +287,7 @@ def price_band_bar(data: pd.DataFrame) -> go.Figure:
     if data.empty:
         return empty_figure("价格带销售贡献")
     fig = go.Figure()
-    fig.add_trace(go.Bar(x=data["PriceBand"], y=data["销售额"], name="销售额", marker_color="#FDE68A", opacity=0.62))
+    fig.add_trace(go.Bar(x=data["PriceBand"], y=data["销售额"], name="销售额", marker_color=CREAM, opacity=0.72))
     fig.add_trace(
         go.Scatter(
             x=data["PriceBand"],
