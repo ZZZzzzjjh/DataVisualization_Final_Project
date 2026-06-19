@@ -78,7 +78,6 @@ def cached_dictionary() -> pd.DataFrame:
 sales_df = cached_sales()
 
 st.title("2024年电商平台在线销售可视化分析")
-st.caption("数据源：Kaggle Online Sales Dataset - Popular Marketplace Data；当前样本覆盖 2024-01-01 至 2024-08-27。")
 
 with st.sidebar:
     st.header("筛选条件")
@@ -216,6 +215,7 @@ with tab_ai:
 
 with tab_data:
     st.caption(f"当前读取文件：{RAW_CSV.name}")
+    st.caption("数据源：Kaggle Online Sales Dataset - Popular Marketplace Data；当前样本覆盖 2024-01-01 至 2024-08-27。")
     c1, c2 = st.columns([0.9, 1.1])
     with c1:
         st.dataframe(cached_summary(), use_container_width=True, hide_index=True)

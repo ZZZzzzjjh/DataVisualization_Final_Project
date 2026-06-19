@@ -50,16 +50,8 @@ def apply_layout(fig: go.Figure, title: str, height: int = 370) -> go.Figure:
 def apply_doughnut_layout(fig: go.Figure, title: str, height: int = 430) -> go.Figure:
     fig = apply_layout(fig, title, height)
     fig.update_layout(
-        margin=dict(l=28, r=28, t=58, b=92),
-        legend=dict(
-            orientation="h",
-            yanchor="top",
-            y=-0.16,
-            xanchor="center",
-            x=0.5,
-            font=dict(size=10),
-            traceorder="normal",
-        ),
+        showlegend=False,
+        margin=dict(l=28, r=28, t=58, b=34),
     )
     return fig
 
@@ -80,6 +72,7 @@ def monthly_sales_line(data: pd.DataFrame) -> go.Figure:
         )
     )
     fig.update_layout(
+        showlegend=False,
         xaxis=dict(title="月份"),
         yaxis=dict(title="销售额", tickprefix="$"),
         yaxis2=dict(title="交易量", overlaying="y", side="right", showgrid=False),
@@ -154,7 +147,13 @@ def category_share_doughnut(data: pd.DataFrame) -> go.Figure:
     if data.empty:
         return empty_figure("商品类别销售额占比")
     fig = px.pie(data, values="销售额", names="Product Category", hole=0.56, color_discrete_sequence=BLUE_SEQ)
-    fig.update_traces(marker=dict(colors=BLUE_SEQ), textposition="inside", texttemplate="%{percent:.0%}", insidetextorientation="radial")
+    fig.update_traces(
+        marker=dict(colors=BLUE_SEQ),
+        textposition="inside",
+        texttemplate="%{percent:.0%}",
+        insidetextorientation="radial",
+        hovertemplate="%{label}<br>销售额：$%{value:,.2f}<br>占比：%{percent}<extra></extra>",
+    )
     return apply_doughnut_layout(fig, "商品类别销售额占比")
 
 
@@ -181,8 +180,7 @@ def category_waterfall(data: pd.DataFrame, top_n: int = 6) -> go.Figure:
             connector={"line": {"color": "#CBD5E1"}},
             increasing={"marker": {"color": SECONDARY}},
             totals={"marker": {"color": PRIMARY}},
-            text=[f"${v:,.0f}" for v in y],
-            textposition="inside",
+            hovertemplate="%{x}<br>销售额：$%{y:,.2f}<extra></extra>",
         )
     )
     fig.update_yaxes(title="销售额", tickprefix="$")
@@ -219,7 +217,10 @@ def product_treemap(data: pd.DataFrame) -> go.Figure:
         color_continuous_scale=COLOR_SCALE,
         hover_data={"交易量": ":,", "销量": ":,", "平均单价": ":$,.2f", "销售额": ":$,.2f"},
     )
-    fig.update_traces(textinfo="label+value+percent parent")
+    fig.update_traces(
+        texttemplate="",
+        hovertemplate="%{label}<br>销售额：$%{value:,.2f}<br>平均单价：$%{color:,.2f}<extra></extra>",
+    )
     return apply_layout(fig, "商品销售层级树图", 520)
 
 
@@ -258,6 +259,7 @@ def price_band_bar(data: pd.DataFrame) -> go.Figure:
         )
     )
     fig.update_layout(
+        showlegend=False,
         xaxis=dict(title="价格带"),
         yaxis=dict(title="销售额", tickprefix="$"),
         yaxis2=dict(title="销量", overlaying="y", side="right", showgrid=False),
@@ -289,7 +291,13 @@ def price_band_doughnut(data: pd.DataFrame) -> go.Figure:
     if data.empty:
         return empty_figure("价格带销售额占比")
     fig = px.pie(data, values="销售额", names="PriceBand", hole=0.56, color_discrete_sequence=BLUE_SEQ)
-    fig.update_traces(marker=dict(colors=BLUE_SEQ), textposition="inside", texttemplate="%{percent:.0%}", insidetextorientation="radial")
+    fig.update_traces(
+        marker=dict(colors=BLUE_SEQ),
+        textposition="inside",
+        texttemplate="%{percent:.0%}",
+        insidetextorientation="radial",
+        hovertemplate="%{label}<br>销售额：$%{value:,.2f}<br>占比：%{percent}<extra></extra>",
+    )
     return apply_doughnut_layout(fig, "价格带销售额占比")
 
 
@@ -316,7 +324,13 @@ def payment_doughnut(data: pd.DataFrame) -> go.Figure:
     if data.empty:
         return empty_figure("支付方式销售额占比")
     fig = px.pie(data, values="销售额", names="Payment Method", hole=0.56, color_discrete_sequence=BLUE_SEQ)
-    fig.update_traces(marker=dict(colors=BLUE_SEQ), textposition="inside", texttemplate="%{percent:.0%}", insidetextorientation="radial")
+    fig.update_traces(
+        marker=dict(colors=BLUE_SEQ),
+        textposition="inside",
+        texttemplate="%{percent:.0%}",
+        insidetextorientation="radial",
+        hovertemplate="%{label}<br>销售额：$%{value:,.2f}<br>占比：%{percent}<extra></extra>",
+    )
     return apply_doughnut_layout(fig, "支付方式销售额占比")
 
 
@@ -350,8 +364,8 @@ def region_payment_bar(data: pd.DataFrame) -> go.Figure:
     fig.update_xaxes(title="地区")
     fig = apply_layout(fig, "地区与支付方式交叉销售额", 470)
     fig.update_layout(
+        showlegend=False,
         margin=dict(l=64, r=38, t=62, b=96),
-        legend=dict(orientation="h", yanchor="top", y=-0.18, xanchor="center", x=0.5, font=dict(size=11)),
     )
     return fig
 
