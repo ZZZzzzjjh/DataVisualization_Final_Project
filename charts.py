@@ -5,24 +5,24 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 
-CORAL = "#F57C6E"
-APRICOT = "#F2B56E"
-CREAM = "#FBE79E"
-SAGE = "#84C3B7"
-AQUA = "#88D7DA"
-SKY = "#71B8ED"
-LAVENDER = "#B8AEEA"
-PINK = "#F2A8DA"
+CORAL = "#FF9AA2"
+APRICOT = "#FFB38A"
+CREAM = "#FFE59D"
+SAGE = "#9BE7C3"
+AQUA = "#8DE1E7"
+SKY = "#8EC5FF"
+LAVENDER = "#C7B6FF"
+PINK = "#F5A6D7"
 PRIMARY = CORAL
 SECONDARY = APRICOT
 ACCENT = CREAM
 PURPLE = LAVENDER
 ROSE = PINK
-SCI_PALETTE = [CORAL, APRICOT, CREAM, SAGE, AQUA, SKY, LAVENDER, PINK]
-COLOR_SEQ = SCI_PALETTE
-COLOR_SCALE = SCI_PALETTE
-BLUE_SEQ = SCI_PALETTE
-BAR_SCALE = SCI_PALETTE
+LIGHT_PALETTE = [CORAL, APRICOT, CREAM, SAGE, AQUA, SKY, LAVENDER, PINK]
+COLOR_SEQ = LIGHT_PALETTE
+COLOR_SCALE = LIGHT_PALETTE
+BLUE_SEQ = LIGHT_PALETTE
+BAR_SCALE = LIGHT_PALETTE
 HEATMAP_SCALE = [
     [0.0, CORAL],
     [0.14, APRICOT],
@@ -141,7 +141,7 @@ def daily_sales_line(data: pd.DataFrame) -> go.Figure:
     if data.empty:
         return empty_figure("日度销售额变化")
     fig = px.line(data, x="DateOnly", y="销售额", markers=False, color_discrete_sequence=[COLOR_SEQ[0]])
-    fig.update_traces(fill="tozeroy", fillcolor="rgba(245, 124, 110, 0.16)")
+    fig.update_traces(fill="tozeroy", fillcolor="rgba(255, 154, 162, 0.18)")
     fig.update_yaxes(title="销售额", tickprefix="$")
     fig.update_xaxes(title="日期")
     return apply_layout(fig, "日度销售额变化", 350)
