@@ -47,11 +47,33 @@ def apply_layout(fig: go.Figure, title: str, height: int = 370) -> go.Figure:
     return fig
 
 
+def place_bottom_legend(fig: go.Figure, bottom: int = 96, font_size: int = 11) -> go.Figure:
+    fig.update_layout(
+        margin=dict(l=64, r=70, t=62, b=bottom),
+        legend=dict(
+            orientation="h",
+            yanchor="top",
+            y=-0.16,
+            xanchor="center",
+            x=0.5,
+            font=dict(size=font_size),
+        ),
+    )
+    return fig
+
+
 def apply_doughnut_layout(fig: go.Figure, title: str, height: int = 430) -> go.Figure:
     fig = apply_layout(fig, title, height)
     fig.update_layout(
-        showlegend=False,
-        margin=dict(l=28, r=28, t=58, b=34),
+        margin=dict(l=28, r=28, t=58, b=92),
+        legend=dict(
+            orientation="h",
+            yanchor="top",
+            y=-0.16,
+            xanchor="center",
+            x=0.5,
+            font=dict(size=10),
+        ),
     )
     return fig
 
@@ -72,13 +94,13 @@ def monthly_sales_line(data: pd.DataFrame) -> go.Figure:
         )
     )
     fig.update_layout(
-        showlegend=False,
         xaxis=dict(title="月份"),
         yaxis=dict(title="销售额", tickprefix="$"),
-        yaxis2=dict(title="交易量", overlaying="y", side="right", showgrid=False),
+        yaxis2=dict(title="交易量", overlaying="y", side="right", showgrid=False, title_standoff=14),
         hovermode="x unified",
     )
-    return apply_layout(fig, "月度销售趋势", 400)
+    fig = apply_layout(fig, "月度销售趋势", 420)
+    return place_bottom_legend(fig, bottom=86)
 
 
 def monthly_category_area(data: pd.DataFrame) -> go.Figure:
@@ -203,7 +225,8 @@ def category_price_scatter(data: pd.DataFrame) -> go.Figure:
     fig.update_traces(marker=dict(line=dict(color="#FFFFFF", width=1.2)))
     fig.update_xaxes(title="销量")
     fig.update_yaxes(title="销售额", tickprefix="$")
-    return apply_layout(fig, "品类销量与销售额关系", 440)
+    fig = apply_layout(fig, "品类销量与销售额关系", 470)
+    return place_bottom_legend(fig, bottom=110, font_size=10)
 
 
 def product_treemap(data: pd.DataFrame) -> go.Figure:
@@ -218,10 +241,12 @@ def product_treemap(data: pd.DataFrame) -> go.Figure:
         hover_data={"交易量": ":,", "销量": ":,", "平均单价": ":$,.2f", "销售额": ":$,.2f"},
     )
     fig.update_traces(
-        texttemplate="",
+        textinfo="label",
+        textfont=dict(size=11),
         hovertemplate="%{label}<br>销售额：$%{value:,.2f}<br>平均单价：$%{color:,.2f}<extra></extra>",
     )
-    return apply_layout(fig, "商品销售层级树图", 520)
+    fig.update_layout(uniformtext=dict(minsize=10, mode="hide"))
+    return apply_layout(fig, "商品销售层级树图", 560)
 
 
 def product_bar(data: pd.DataFrame) -> go.Figure:
@@ -259,13 +284,13 @@ def price_band_bar(data: pd.DataFrame) -> go.Figure:
         )
     )
     fig.update_layout(
-        showlegend=False,
         xaxis=dict(title="价格带"),
         yaxis=dict(title="销售额", tickprefix="$"),
-        yaxis2=dict(title="销量", overlaying="y", side="right", showgrid=False),
+        yaxis2=dict(title="销量", overlaying="y", side="right", showgrid=False, title_standoff=14),
         hovermode="x unified",
     )
-    return apply_layout(fig, "价格带销售贡献", 390)
+    fig = apply_layout(fig, "价格带销售贡献", 420)
+    return place_bottom_legend(fig, bottom=86)
 
 
 def region_price_heatmap(data: pd.DataFrame) -> go.Figure:
@@ -279,12 +304,14 @@ def region_price_heatmap(data: pd.DataFrame) -> go.Figure:
             y=matrix.index,
             colorscale=HEATMAP_SCALE,
             hovertemplate="地区：%{y}<br>价格带：%{x}<br>销售额：$%{z:,.2f}<extra></extra>",
-            colorbar=dict(title="销售额"),
+            colorbar=dict(title=dict(text="销售额", side="top"), thickness=14, len=0.78),
         )
     )
     fig.update_xaxes(title="价格带")
     fig.update_yaxes(title="地区")
-    return apply_layout(fig, "地区与价格带销售热力图", 420)
+    fig = apply_layout(fig, "地区与价格带销售热力图", 440)
+    fig.update_layout(margin=dict(l=64, r=92, t=62, b=70))
+    return fig
 
 
 def price_band_doughnut(data: pd.DataFrame) -> go.Figure:
@@ -363,11 +390,7 @@ def region_payment_bar(data: pd.DataFrame) -> go.Figure:
     fig.update_yaxes(title="销售额", tickprefix="$")
     fig.update_xaxes(title="地区")
     fig = apply_layout(fig, "地区与支付方式交叉销售额", 470)
-    fig.update_layout(
-        showlegend=False,
-        margin=dict(l=64, r=38, t=62, b=96),
-    )
-    return fig
+    return place_bottom_legend(fig, bottom=102, font_size=11)
 
 
 def category_region_heatmap(data: pd.DataFrame) -> go.Figure:
@@ -381,9 +404,11 @@ def category_region_heatmap(data: pd.DataFrame) -> go.Figure:
             y=matrix.index,
             colorscale=HEATMAP_SCALE,
             hovertemplate="品类：%{y}<br>地区：%{x}<br>销售额：$%{z:,.2f}<extra></extra>",
-            colorbar=dict(title="销售额"),
+            colorbar=dict(title=dict(text="销售额", side="top"), thickness=14, len=0.78),
         )
     )
     fig.update_xaxes(title="地区")
     fig.update_yaxes(title="商品类别")
-    return apply_layout(fig, "品类与地区销售热力图", max(420, min(640, 42 * len(matrix.index) + 130)))
+    fig = apply_layout(fig, "品类与地区销售热力图", max(440, min(660, 42 * len(matrix.index) + 140)))
+    fig.update_layout(margin=dict(l=84, r=92, t=62, b=70))
+    return fig
